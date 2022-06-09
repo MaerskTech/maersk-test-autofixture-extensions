@@ -1,0 +1,3 @@
+pr-by-dependabot:
+- "src/**/*"
+- "test/**/*"

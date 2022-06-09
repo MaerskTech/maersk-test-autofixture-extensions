@@ -1,0 +1,89 @@
+name: Publish Nuget packages
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: 
+      - opened
+      - synchronize
+
+env:
+  DOTNET_VERSION: 6.0.201
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Build & test - User
+          if: github.actor != 'dependabot[bot]'
+          uses: ./.github/actions/build-test
+          with:
+            nuget-add-update-source-commands: dotnet nuget update source GitHub --configfile nuget.config --username ${{ github.actor }} --password ${{ secrets.GHCR_PULL_TOKEN }} --store-password-in-clear-text
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+            test-projects-directory-path: './test'
+        
+        - name: Build & test - Dependabot
+          if: github.actor == 'dependabot[bot]'
+          uses: ./.github/actions/build-test
+          with:
+            nuget-add-update-source-commands: dotnet nuget update source GitHub --configfile nuget.config --username ${{ github.actor }} --password ${{ secrets.GH_PACKAGES_READ_TOKEN }} --store-password-in-clear-text
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+            test-projects-directory-path: './test'        
+        
+        - name: Publish Unit Test Results
+          uses: EnricoMi/publish-unit-test-result-action@v1.34
+          if: always()
+          with:
+            files:  ./test/**/TestResults/*.xml
+        
+        - name: Upload beta NuGet to Packages
+          uses: ./.github/actions/upload-nuget
+          with:
+            nuget-pack-command:  dotnet pack -c Release -o release/beta --no-restore --version-suffix beta-${{github.run_id}}
+            path: release
+        
+        - name: Upload prod NuGet to Packages
+          uses: ./.github/actions/upload-nuget
+          with:
+            nuget-pack-command:  dotnet pack -c Release -o release --no-restore
+            path: release
+          
+    Publish-Beta:
+      name: Publish beta package
+      environment:
+        name: Development - Nuget
+      runs-on: ubuntu-latest
+      needs: Build
+      if: ${{ success() }}
+      steps:
+        - uses: actions/checkout@v3        
+        
+        - name: Publish NuGet package
+          uses: ./.github/actions/publish-nuget
+          with:
+            package-path: nugetPackage\beta\*.nupkg
+            token: ${{ secrets.GITHUB_TOKEN }}
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    Publish-Production:
+      name: Publish production package
+      environment:
+        name: Production - Nuget
+      runs-on: ubuntu-latest
+      needs: Build
+      if: ${{ success() && github.ref == 'refs/heads/main' }}
+      steps:
+        - uses: actions/checkout@v3
+        
+        - name: Publish NuGet package
+          uses: ./.github/actions/publish-nuget
+          with:
+            package-path: nugetPackage\*.nupkg
+            token: ${{ secrets.GITHUB_TOKEN }}
+            dotnet-version: ${{ env.DOTNET_VERSION }}

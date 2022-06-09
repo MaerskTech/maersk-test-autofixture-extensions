@@ -1,0 +1,40 @@
+name: 'Publish NuGet package'
+description: 'For publishing a NuGet package.'
+
+inputs:
+  package-source:
+    description: 'The NuGet feed to publish the NuGet package to.'
+    required: false
+    default: https://nuget.pkg.github.com/maersktech/index.json
+  artifact:
+    description: 'Name of the artifact. The downloaded files are stored here.'
+    required: false
+    default: nugetPackage
+  package-path:
+    description: 'The path on the agent where the files are stored.'
+    required: false
+    default: nugetPackage\*.nupkg
+  token:
+    description: 'Access token to authenticate the package source.'
+    required: false
+  dotnet-version:
+    description: 'Dotnet sdk version to be installed'
+    required: false
+    default: 6.0.201
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: ${{ inputs.dotnet-version }}  
+
+    - name: Download NuGet package artifact
+      uses: actions/download-artifact@v1.0.0
+      with:
+        name: nugetPackage
+    
+    - name: Publish packages
+      run: dotnet nuget push ${{ inputs.package-path }} --api-key ${{ inputs.token }} --source ${{ inputs.package-source }} --skip-duplicate
+      shell: pwsh

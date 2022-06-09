@@ -1,0 +1,42 @@
+#
+# https://github.com/aquasecurity/trivy-action#using-trivy-to-scan-your-git-repo
+#
+name: Trivy scan
+
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+    types:
+      - opened
+      - synchronize
+
+concurrency:
+  group: trivy-repository-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Trivy scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          exit-code: '1'
+          hide-progress: false
+          output: 'trivy-results.sarif'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'

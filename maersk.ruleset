@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Maersk Ruleset" Description="Maersk ruleset." ToolsVersion="16.0">
+  <Rules AnalyzerId="AsyncUsageAnalyzers" RuleNamespace="AsyncUsageAnalyzers">
+    <Rule Id="UseConfigureAwait" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA0001" Action="None" />
+    <Rule Id="SA1009" Action="None" />
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1305" Action="Warning" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1413" Action="None" />
+    <Rule Id="SA1600" Action="None" />
+    <Rule Id="SA1602" Action="None" />
+    <Rule Id="SA1609" Action="None" />
+    <Rule Id="SA1611" Action="None" />
+    <Rule Id="SA1633" Action="None" />
+    <Rule Id="SA1652" Action="None" />
+    <Rule Id="SA1005" Action="None" />
+	<Rule Id="SA1313" Action="None" />
+	<Rule Id="SA1649" Action="None" /><!-- TODO - Reenable this once StyleCop cooperates better with records. -->
+  </Rules>
+  <Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
+    <Rule Id="CA1308" Action="Info" />
+  </Rules>
+</RuleSet>

@@ -1,0 +1,25 @@
+name: 'Upload Nuget package'
+description: 'A template for uploading a NuGet package to e.g. GitHub Packages for sharing between stages'
+
+inputs:
+  nuget-pack-command:
+    description: 'Command to create NuGet a package'
+    required: false
+    default: dotnet pack -c Release -o release --no-restore
+  package-path:
+    description: 'Path of the NuGet package'
+    required: false
+    default: release
+
+runs:
+  using: "composite"
+  steps:
+    - name: NuGet pack
+      run: ${{ inputs.nuget-pack-command }}
+      shell: pwsh
+    
+    - name: Upload NuGet package back to GitHub Packages
+      uses: actions/upload-artifact@v2
+      with:
+        name: nugetPackage
+        path: ${{ inputs.package-path }}

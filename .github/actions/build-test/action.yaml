@@ -1,0 +1,57 @@
+name: 'Build and test'
+description: 'An action for building and running unit tests'
+
+inputs:
+  test-projects-directory-path:
+    description: 'Directory path of test projects, e.g. "./test"'
+    required: true
+  nuget-add-update-source-commands:
+    description: 'command to add/update NuGet source'
+    required: true
+  dotnet-version:
+    description: 'Dotnet sdk version to be installed'
+    required: false
+    default: 6.0.201
+  nuget-config-file:
+    description: 'NuGet configuration file'
+    required: false
+    default: nuget.config  
+  test-logger-value:
+    description: 'Value for option --logger in /"dotnet test/" command'
+    required: false
+    default: 'junit;LogFileName=TestResults.xml'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: ${{ inputs.dotnet-version }}  
+    
+    - name: Restore dependencies
+      run: |
+          ${{ inputs.nuget-add-update-source-commands }}
+          dotnet restore --configfile ${{ inputs.nuget-config-file }}
+      shell: pwsh
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      shell: pwsh
+
+    - name: Run tests and prepare test results
+      env:
+        TEST_LOGGER: ${{ inputs.test-logger-value }}
+        TEST_DIRECTORY_PATH: ${{ inputs.test-projects-directory-path }}
+      run: |
+          if  [[ $TEST_LOGGER == junit* ]];
+          then
+                for FILE in  $(ls ${TEST_DIRECTORY_PATH}/**/*.csproj);
+                do 
+                    dotnet add $FILE package JunitXml.TestLogger --source 'https://api.nuget.org/v3/index.json'; 
+                done
+           else
+                echo "Skipped adding JunitXml.TestLogger package. TestLogger: $TEST_LOGGER"
+           fi
+           dotnet test --collect='XPlat Code Coverage' --logger "$TEST_LOGGER" --verbosity normal
+      shell: bash

@@ -1,0 +1,45 @@
+name: Add label to new pull requests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  deployments: read
+  id-token: none
+  issues: read
+  discussions: none
+  packages: write
+  pages: none
+  pull-requests: write
+  repository-projects: read
+  security-events: write
+  statuses: read
+
+jobs:
+  add_label:
+    runs-on: ubuntu-latest
+    name: Add label
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: actions/labeler@v3
+      if: github.actor != 'dependabot[bot]'
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        configuration-path: .github/labeler-user.yaml
+
+    - uses: actions/labeler@v3
+      if: github.actor == 'dependabot[bot]'
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        configuration-path: .github/labeler-dependabot.yaml
