@@ -125,7 +125,7 @@ Read the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
 This library was originally written by:
 - [Mikael Kühn](https://github.com/mkumaersk)
 - [Nicolai Sørensen](https://github.com/nicolai-sorensen1-maersk)
-- [Sebastian Dittman](https://github.com/sebastiankdittmann)
+- [Sebastian Dittmann](https://github.com/sebastiankdittmann)
 - [Oleksandr Ostapenko](https://github.com/oos018)
 
 Unit tests and documentation added by:
