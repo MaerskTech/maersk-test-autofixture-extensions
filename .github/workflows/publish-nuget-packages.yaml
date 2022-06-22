@@ -37,7 +37,7 @@ jobs:
             test-projects-directory-path: './test'        
         
         - name: Publish Unit Test Results
-          uses: EnricoMi/publish-unit-test-result-action@v1.34
+          uses: EnricoMi/publish-unit-test-result-action@v1.38
           if: always()
           with:
             files:  ./test/**/TestResults/*.xml
