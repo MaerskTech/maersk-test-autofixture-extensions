@@ -1,28 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<VersionPrefix>1.2.0</VersionPrefix>
-		<Authors>Service Delivery</Authors>
-		<Company>A.P. Møller - Mærsk</Company>
-		<PackageProjectUrl>https://github.com/MaerskTech/maersk-test-autofixture-extensions</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/MaerskTech/maersk-test-autofixture-extensions</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>unittest autofixture</PackageTags>
-		<Description>AutoFixture extensions for unit testing.</Description>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<EmbedAllSources>true</EmbedAllSources>
-		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="AutoFixture" Version="4.17.0" />
-		<PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
-		<PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
-		<PackageReference Include="AutoMapper" Version="11.0.1" />
-		<PackageReference Include="Castle.Core" Version="4.4.1" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <VersionPrefix>1.2.0</VersionPrefix>
+    <Authors>Service Delivery</Authors>
+    <Company>A.P. Møller - Mærsk</Company>
+    <PackageProjectUrl>https://github.com/MaerskTech/maersk-test-autofixture-extensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MaerskTech/maersk-test-autofixture-extensions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>unittest autofixture</PackageTags>
+    <Description>AutoFixture extensions for unit testing.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EmbedAllSources>true</EmbedAllSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.17.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Castle.Core" Version="4.4.1" />
+  </ItemGroup>
 </Project>
