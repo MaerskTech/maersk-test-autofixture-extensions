@@ -16,6 +16,7 @@ env:
 jobs:
     build:
       runs-on: ubuntu-latest
+      name: Build
 
       steps:
         - uses: actions/checkout@v3
@@ -67,7 +68,7 @@ jobs:
         - name: Publish NuGet package
           uses: ./.github/actions/publish-nuget
           with:
-            package-path: nugetPackage\beta\*.nupkg
+            package-path: beta\*.nupkg
             token: ${{ secrets.GITHUB_TOKEN }}
             dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -84,7 +85,7 @@ jobs:
         - name: Publish NuGet package
           uses: ./.github/actions/publish-nuget
           with:
-            package-path: nugetPackage\*.nupkg
+            package-path: '*.nupkg'
             token: ${{ secrets.GITHUB_TOKEN }}
             dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -102,6 +103,6 @@ jobs:
           uses: ./.github/actions/publish-nuget
           with:
             package-source: https://api.nuget.org/v3/index.json
-            package-path: nugetPackage\*.nupkg
+            package-path: '*.nupkg'
             token: ${{ secrets.NUGET_ORG_TOKEN }}
             dotnet-version: ${{ env.DOTNET_VERSION }}
