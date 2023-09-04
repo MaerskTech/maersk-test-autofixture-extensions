@@ -53,6 +53,7 @@ public sealed class AutoDataWithCustomizationAttributeTest
         public void Customize(IFixture fixture)
         {
             var classWithDateOnly = fixture.Create<ClassWithDateOnly>();
+
             classWithDateOnly = classWithDateOnly with { DateOnly1 = _expectedDateOnly };
 
             fixture.Register(() => classWithDateOnly);
