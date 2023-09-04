@@ -46,13 +46,13 @@ jobs:
           uses: ./.github/actions/upload-nuget
           with:
             nuget-pack-command:  dotnet pack -c Release -o release/beta --no-restore --version-suffix beta-${{github.run_id}}
-            path: release
+            package-path: release
         
         - name: Upload prod NuGet to Packages
           uses: ./.github/actions/upload-nuget
           with:
             nuget-pack-command:  dotnet pack -c Release -o release --no-restore
-            path: release
+            package-path: release
           
     Publish-Beta:
       name: Publish beta package
