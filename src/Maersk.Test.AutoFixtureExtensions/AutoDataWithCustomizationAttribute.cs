@@ -25,9 +25,11 @@ public sealed class AutoDataWithCustomizationAttribute : AutoDataAttribute
                     customizations.Select(customization =>
                         CustomizationBuilder.CreateCustomization(customization)));
 
-                var fixture = new Fixture().Customize(composite);
+                var fixture = new Fixture();
 
                 fixture.Customize<DateOnly>(c => c.FromFactory<DateTime>(DateOnly.FromDateTime));
+
+                fixture.Customize(composite);
 
                 return fixture;
             })

@@ -3,6 +3,7 @@
 
 namespace Maersk.Test.AutoFixtureExtensions.Tests;
 
+using System;
 using System.Drawing;
 using AutoFixture;
 using AutoFixture.Xunit2;
@@ -18,6 +19,7 @@ public sealed class InlineAutoDataWithCustomizationAttributeTest
     {
         private const string ExpectedArgument1 = "ExpectedArgument1";
         private const double ExpectedArgument2 = 123.4;
+        private const int ExpectedDateOnlyYear = 2023;
 
         [Theory]
         [AutoData]
@@ -144,6 +146,17 @@ public sealed class InlineAutoDataWithCustomizationAttributeTest
             argument2.Should().Be(ExpectedArgument2);
         }
 
+        [Theory]
+        [InlineAutoDataWithCustomization(
+            typeof(SampleCustomizationWithDateOnlyArguments),
+            new Type[] { typeof(OtherSampleCustomizationWithDateOnly) },
+            ExpectedDateOnlyYear)]
+        public void Given_arguments_with_DateOnly_inline_customizations_When_creating_Then_arguments_are_transferred_to_the_test_method(
+            int year)
+        {
+            year.Should().Be(ExpectedDateOnlyYear);
+        }
+
         public class SampleCustomizationWithArgumentsAndVerification : ICustomization
         {
             public SampleCustomizationWithArgumentsAndVerification(string argument1, double argument2)
@@ -177,6 +190,30 @@ public sealed class InlineAutoDataWithCustomizationAttributeTest
         {
             public OtherSampleCustomizationWithArguments()
             {
+            }
+
+            public void Customize(IFixture fixture)
+            {
+            }
+        }
+
+        private class OtherSampleCustomizationWithDateOnly : ICustomization
+        {
+            public OtherSampleCustomizationWithDateOnly()
+            {
+            }
+
+            public void Customize(IFixture fixture)
+            {
+                _ = fixture.Create<ClassWithDateOnly>();
+            }
+        }
+
+        private class SampleCustomizationWithDateOnlyArguments : ICustomization
+        {
+            public SampleCustomizationWithDateOnlyArguments(int year)
+            {
+                _ = year;
             }
 
             public void Customize(IFixture fixture)
