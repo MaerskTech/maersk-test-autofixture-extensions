@@ -33,7 +33,13 @@ public sealed class InlineAutoDataWithCustomizationAttribute : InlineAutoDataAtt
                         otherCustomizations,
                         arguments));
 
-                return new Fixture().Customize(compositeCustomization);
+                var fixture = new Fixture();
+
+                fixture.Customize<DateOnly>(c => c.FromFactory<DateTime>(DateOnly.FromDateTime));
+
+                fixture.Customize(compositeCustomization);
+
+                return fixture;
             }),
             arguments)
     {

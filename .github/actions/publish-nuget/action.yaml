@@ -26,12 +26,12 @@ runs:
   using: "composite"
   steps:
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
           dotnet-version: ${{ inputs.dotnet-version }}  
 
     - name: Download NuGet package artifact
-      uses: actions/download-artifact@v1.0.0
+      uses: actions/download-artifact@v3
       with:
         name: nugetPackage
     

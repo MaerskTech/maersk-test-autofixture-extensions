@@ -19,7 +19,7 @@ runs:
       shell: pwsh
     
     - name: Upload NuGet package back to GitHub Packages
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: nugetPackage
         path: ${{ inputs.package-path }}

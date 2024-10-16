@@ -12,6 +12,7 @@ using Xunit;
 public sealed class AutoDataWithCustomizationAttributeTest
 {
     public const string ExpectedStringValue = "sample";
+    private static DateOnly _expectedDateOnly = new DateOnly(2023, 9, 4);
 
     [Trait(nameof(Category), Category.Unit)]
     public sealed class Constructor
@@ -30,6 +31,13 @@ public sealed class AutoDataWithCustomizationAttributeTest
         {
             value.Should().Be(ExpectedStringValue);
         }
+
+        [Theory]
+        [AutoDataWithCustomization(typeof(DateOnlyCustomization))]
+        public void Given_a_DateOnly_value_When_testing_Then_it_can_generate_the_value(ClassWithDateOnly value)
+        {
+            value.DateOnly1.Should().Be(_expectedDateOnly);
+        }
     }
 
     private class SampleCustomization : ICustomization
@@ -37,6 +45,18 @@ public sealed class AutoDataWithCustomizationAttributeTest
         public void Customize(IFixture fixture)
         {
             fixture.Register(() => ExpectedStringValue);
+        }
+    }
+
+    private class DateOnlyCustomization : ICustomization
+    {
+        public void Customize(IFixture fixture)
+        {
+            var classWithDateOnly = fixture.Create<ClassWithDateOnly>();
+
+            classWithDateOnly = classWithDateOnly with { DateOnly1 = _expectedDateOnly };
+
+            fixture.Register(() => classWithDateOnly);
         }
     }
 }
