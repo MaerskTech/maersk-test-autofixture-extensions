@@ -31,9 +31,9 @@ runs:
           dotnet-version: ${{ inputs.dotnet-version }}  
 
     - name: Download NuGet package artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: nugetPackage
+        name: ${{ inputs.artifact }}
     
     - name: Publish packages
       run: dotnet nuget push ${{ inputs.package-path }} --api-key ${{ inputs.token }} --source ${{ inputs.package-source }} --skip-duplicate

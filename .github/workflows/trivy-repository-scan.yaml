@@ -25,16 +25,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+        shell: bash
+
       - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          exit-code: '1'
-          hide-progress: false
-          output: 'trivy-results.sarif'
-          severity: 'HIGH,CRITICAL'
+        run: |
+          trivy fs . \
+            --ignore-unfixed \
+            --format sarif \
+            --exit-code 1 \
+            --no-progress \
+            --output trivy-results.sarif \
+            --severity HIGH,CRITICAL
+        shell: bash
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
