@@ -11,7 +11,7 @@ on:
       - synchronize
 
 env:
-  DOTNET_VERSION: 6.0.201
+  DOTNET_VERSION: 10.0.201
 
 jobs:
     build:

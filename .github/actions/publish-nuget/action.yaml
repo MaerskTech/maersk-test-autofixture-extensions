@@ -20,7 +20,7 @@ inputs:
   dotnet-version:
     description: 'Dotnet sdk version to be installed'
     required: false
-    default: 6.0.201
+    default: 10.0.201
 
 runs:
   using: "composite"
