@@ -11,7 +11,7 @@ on:
       - synchronize
 
 env:
-  DOTNET_VERSION: 6.0.201
+  DOTNET_VERSION: 10.0.201
 
 jobs:
     build:
@@ -48,12 +48,14 @@ jobs:
           with:
             nuget-pack-command:  dotnet pack -c Release -o release/beta --no-restore --version-suffix beta-${{github.run_id}}
             package-path: release
+            artifact-name: nugetPackage-beta
         
         - name: Upload prod NuGet to Packages
           uses: ./.github/actions/upload-nuget
           with:
             nuget-pack-command:  dotnet pack -c Release -o release --no-restore
             package-path: release
+            artifact-name: nugetPackage-prod
           
     Publish-Beta:
       name: Publish beta package
@@ -68,6 +70,7 @@ jobs:
         - name: Publish NuGet package
           uses: ./.github/actions/publish-nuget
           with:
+            artifact: nugetPackage-beta
             package-path: beta\*.nupkg
             token: ${{ secrets.GITHUB_TOKEN }}
             dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -85,6 +88,7 @@ jobs:
         - name: Publish NuGet package
           uses: ./.github/actions/publish-nuget
           with:
+            artifact: nugetPackage-prod
             package-path: '*.nupkg'
             token: ${{ secrets.GITHUB_TOKEN }}
             dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -102,6 +106,7 @@ jobs:
         - name: Publish NuGet package
           uses: ./.github/actions/publish-nuget
           with:
+            artifact: nugetPackage-prod
             package-source: https://api.nuget.org/v3/index.json
             package-path: '*.nupkg'
             token: ${{ secrets.NUGET_ORG_TOKEN }}
